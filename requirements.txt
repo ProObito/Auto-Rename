@@ -1,0 +1,10 @@
+pyrogram
+TgCrypto
+motor
+dnspython
+hachoir
+Pillow
+aiohttp
+pytz
+psutil
+pyrofork
