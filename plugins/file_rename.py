@@ -211,7 +211,7 @@ async def auto_rename_files(client, message):
  user_id = message.from_user.id
  check = await madflixbotz.is_autho_user_exist(user_id)
  if not check:
-    await message.reply_text("<b>⚠️ You are not Authorised User ⚠️<blockquote>If you want to use this bot, then please contact: @Shidoteshika1</blockquote></b>")
+    await message.reply_text("<b>⚠️ You are not Authorised User ⚠️<blockquote>If you want to use this bot, then please contact: @i_killed_my_clan</blockquote></b>")
     return
  else:
     firstname = message.from_user.first_name
