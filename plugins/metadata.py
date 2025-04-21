@@ -1,4 +1,4 @@
-from helper.database import madflixbots as db
+from helper.database import madflixbotz as db
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from config import Txt
