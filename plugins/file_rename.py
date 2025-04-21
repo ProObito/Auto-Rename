@@ -356,7 +356,7 @@ async def auto_rename_files(client, message):
 
             # Add metadata if enabled
             try:
-                if await madflixbotz.get_metadata_status(user_id):
+                if await madflixbotz.get_metadata(user_id):
                     temp_path = f"downloads/temp_{new_file_name}"
                     await add_metadata(file_path, temp_path, user_id)
                     os.remove(file_path)
