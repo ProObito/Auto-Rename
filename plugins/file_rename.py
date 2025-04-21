@@ -81,6 +81,8 @@ async def check_authorise_user(client, message):
     else:
         await message.reply_text("**Nope, You are not Authorised user 🔴**\n<blockquote>**You can't send files to Rename..**</blockquote>\n**Contact @Shidoteshika1 to add you as Authorised user**")
 
+renaming_operations = {}
+
 # Pattern 1: S01E02 or S01EP02
 pattern1 = re.compile(r'S(\d+)(?:E|EP)(\d+)')
 # Pattern 2: S01 E02 or S01 EP02 or S01 - E01 or S01 - EP02
@@ -289,6 +291,16 @@ async def auto_rename_files(client, message):
 
         print(f"Original File Name: {file_name}")
         
+        # Check whether the file is already being renamed or has been renamed recently
+        if file_id in renaming_operations:
+            elapsed_time = (datetime.now() - renaming_operations[file_id]).seconds
+            if elapsed_time < 10:
+                print("File is being ignored as it is currently being renamed or was renamed recently.")
+                return  # Exit the handler if the file is being ignored
+
+        # Mark the file as currently being renamed
+        renaming_operations[file_id] = datetime.now()
+
         # Extract episode number, season number and qualities
         episode_number = extract_episode_number(file_name)
         season_number = extract_season_number(file_name)
@@ -315,6 +327,8 @@ async def auto_rename_files(client, message):
                     extracted_qualities = extract_quality(file_name)
                     if extracted_qualities == "Unknown":
                         await message.reply_text("I Was Not Able To Extract The Quality Properly. Renaming As 'Unknown'...")
+                        # Mark the file as ignored
+                        del renaming_operations[file_id]
                         return  # Exit the handler if quality extraction fails
                     
                     format_template = format_template.replace(quality_placeholder, "".join(extracted_qualities))           
@@ -328,6 +342,8 @@ async def auto_rename_files(client, message):
             try:
                 path = await client.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram, progress_args=("🌀 Dᴏᴡɴʟᴏᴀᴅ ᴛᴏ Dᴀᴛᴀʙᴀsᴇ ➪ ⌸", download_msg, time.time()))
             except Exception as e:
+                # Mark the file as ignored
+                del renaming_operations[file_id]
                 return await download_msg.edit(e)     
 
             duration = 0
@@ -404,9 +420,13 @@ async def auto_rename_files(client, message):
                 os.remove(file_path)
                 if ph_path:
                     os.remove(ph_path)
+                # Mark the file as ignored
                 return await upload_msg.edit(f"Error: {e}")
 
             await download_msg.delete() 
             os.remove(file_path)
             if ph_path:
                 os.remove(ph_path)
+
+            # Remove the entry from renaming_operations after successful renaming
+            del renaming_operations[file_id]
