@@ -80,7 +80,7 @@ async def check_authorise_user(client, message):
     if check:
         await message.reply_text("**Yes, You are Authorised user 🟢**\n**<blockquote>You can send files to Rename..</blockquote>**")
     else:
-        await message.reply_text("**Nope, You are not Authorised user 🔴**\n<blockquote>**You can't send files to Rename..**</blockquote>\n**Contact @Shidoteshika1 to add you as Authorised user**")
+        await message.reply_text("**Nope, You are not Authorised user 🔴**\n<blockquote>**You can't send files to Rename..**</blockquote>\n**Contact @I_killed_my_clan to add you as Authorised user**")
 
 renaming_operations = {}
 
